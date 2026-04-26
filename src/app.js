@@ -28,10 +28,10 @@ import healthCheckRouter from "./routes/healthcheck.routes.js";
 
 app.use("/api/v1/healthcheck", healthCheckRouter);
 // app.use("/api/v1/auth", authRouter);
-// app.use("/api/v1/projects", projectRouter);// MOUNT THE ROUTERS ON THE APP WITH THEIR RESPECTIVE BASE PATHS
+// app.use("/api/v1/projects", projectRouter); // MOUNT THE ROUTERS ON THE APP WITH THEIR RESPECTIVE BASE PATHS
 
 app.get("/", (req, res) => {
-  res.send("Welcome to basecampy");
+  res.send("Welcome to base API route");
 });
 
 export default app;
