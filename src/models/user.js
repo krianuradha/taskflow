@@ -1,5 +1,7 @@
 import mongoose, { Schema } from "mongoose";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import crypto from "crypto";
 
 const userSchema = new Schema({
   avatar: {
@@ -35,7 +37,7 @@ const userSchema = new Schema({
     required: [true, "Password is required"],
     minlength: [8, "Password must be at least 8 characters long"],
   },
-  isemailVerified: {
+  isEmailVerified: {
     type: Boolean,
     default: false,
   },
