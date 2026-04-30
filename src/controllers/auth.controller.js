@@ -26,7 +26,7 @@ const generateAccessandRefreshTokens = async(userId) => {
 
 const registerUser = asyncHandler(async (req, res) => {
 
-    const { username, email, password } = req.body;
+    const { username, email, fullname, password } = req.body;
     const exsistedUser=await User.findOne({
         $or:[
             {username},
@@ -38,6 +38,7 @@ const registerUser = asyncHandler(async (req, res) => {
  const newUser=await User.create({
     username,
     email,
+    fullname,
     password,
     isEmailVerified:false,
  })
