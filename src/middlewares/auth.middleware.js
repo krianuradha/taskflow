@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import { User } from "../models/user.model.js";
-import { ApiError } from "../utils/errors.js";
-import { asyncHandler } from "../utils/asyncHandler.js";
+import { ApiError } from "../utils/api-error.js";
+import { asyncHandler } from "../utils/async-handler.js";
 
 export const authMiddleware = asyncHandler(async (req, res, next) => {
 
