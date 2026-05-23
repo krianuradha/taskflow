@@ -1,11 +1,3 @@
-import { Router } from "express";
+import projectRouter from "../project/routes.js";
 
-const router = Router();
-
-// TODO: Add project routes here
-// Example:
-// router.get("/", getProjects);
-// router.post("/", createProject);
-// etc.
-
-export default router;
+export default projectRouter;

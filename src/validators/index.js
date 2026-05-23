@@ -15,4 +15,31 @@ const userValidatorLogin = ()=>{
         body("password").notEmpty().withMessage("Password is required"),
     ]
 }
-export {validateRegistration, userValidatorLogin}
+
+const userChangepasswordValidator = ()=>{
+    return[
+        body("currentPassword").notEmpty().withMessage("Current password is required"),
+        body("newPassword").notEmpty().withMessage("New password is required").isLength({min:8}).withMessage("New password must be at least 8 characters long").isStrongPassword().withMessage("New password must contain at least one uppercase letter, one lowercase letter, one number, and one symbol"),
+    ]
+}
+const userForgotPasswordValidator = ()=>{
+    return[
+        body("email").trim().notEmpty().withMessage("Email is required").isEmail().withMessage("Invalid email format"),
+    ]
+}  
+
+const userResetPasswordValidator = ()=>{
+    return[
+        body("token").notEmpty().withMessage("Reset token is required"),
+        body("newPassword").notEmpty().withMessage("New password is required").isLength({min:8}).withMessage("New password must be at least 8 characters long").isStrongPassword().withMessage("New password must contain at least one uppercase letter, one lowercase letter, one number, and one symbol"),
+    ]
+}
+
+export {
+    validateRegistration, 
+    userValidatorLogin,
+    userChangepasswordValidator, 
+    userForgotPasswordValidator,
+    userResetPasswordValidator
+    }
+    //validators for user registration, login, change password, forgot password, and reset password
