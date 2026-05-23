@@ -16,7 +16,7 @@ const userValidatorLogin = ()=>{
     ]
 }
 
-const userChangepasswordValidator = ()=>{
+const userChangePasswordValidator = ()=>{
     return[
         body("currentPassword").notEmpty().withMessage("Current password is required"),
         body("newPassword").notEmpty().withMessage("New password is required").isLength({min:8}).withMessage("New password must be at least 8 characters long").isStrongPassword().withMessage("New password must contain at least one uppercase letter, one lowercase letter, one number, and one symbol"),
@@ -38,7 +38,7 @@ const userResetPasswordValidator = ()=>{
 export {
     validateRegistration, 
     userValidatorLogin,
-    userChangepasswordValidator, 
+    userChangePasswordValidator, 
     userForgotPasswordValidator,
     userResetPasswordValidator
     }
