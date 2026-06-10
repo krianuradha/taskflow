@@ -19,32 +19,28 @@ export default function ProjectMembersPage() {
   const [message, setMessage] = useState<string | null>(null);
   const queryClient = useQueryClient();
 
-  const addMember = useMutation(
-    async () => {
+  const addMember = useMutation({
+    mutationFn: async () => {
       return api.post(`/api/v1/projects/${projectId}/members`, { email, role });
     },
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries(['members', projectId]);
-        setOpen(false);
-        setEmail('');
-        setRole('member');
-        setMessage('Member invited successfully.');
-      },
-      onError: () => {
-        setMessage('Unable to invite member.');
-      }
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['members', projectId] });
+      setOpen(false);
+      setEmail('');
+      setRole('member');
+      setMessage('Member invited successfully.');
+    },
+    onError: () => {
+      setMessage('Unable to invite member.');
     }
-  );
+  });
 
-  const removeMember = useMutation(
-    async (memberId: string) => {
+  const removeMember = useMutation({
+    mutationFn: async (memberId: string) => {
       return api.delete(`/api/v1/projects/${projectId}/members/${memberId}`);
     },
-    {
-      onSuccess: () => queryClient.invalidateQueries(['members', projectId])
-    }
-  );
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['members', projectId] })
+  });
 
   return (
     <div className="space-y-8">
@@ -144,7 +140,7 @@ export default function ProjectMembersPage() {
                 <button
                   type="button"
                   onClick={() => addMember.mutate()}
-                  disabled={addMember.isLoading}
+                  disabled={addMember.isPending}
                   className="rounded-2xl bg-secondary px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#0047b2] disabled:cursor-not-allowed disabled:opacity-60"
                 >
                   Invite member

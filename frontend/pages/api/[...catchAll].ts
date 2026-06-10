@@ -1,4 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
+// @ts-ignore
 import app from '../../../backend/src/index.js';
 
 export const config = {

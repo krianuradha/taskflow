@@ -1,6 +1,6 @@
 'use client';
 
-import { ArrowDownToLine, FileText, ImageSquare } from 'lucide-react';
+import { ArrowDownToLine, FileText, Image as ImageIcon } from 'lucide-react';
 import type { IAttachment } from '@/types';
 
 interface AttachmentCardProps {
@@ -15,7 +15,7 @@ export default function AttachmentCard({ attachment }: AttachmentCardProps) {
       <div className="flex items-center justify-between gap-4">
         <div className="flex items-center gap-3">
           <span className="grid h-12 w-12 place-items-center rounded-3xl bg-secondary/10 text-secondary">
-            {isImage ? <ImageSquare size={20} /> : <FileText size={20} />}
+            {isImage ? <ImageIcon size={20} /> : <FileText size={20} />}
           </span>
           <div>
             <p className="font-semibold text-text-heading">{attachment.name}</p>

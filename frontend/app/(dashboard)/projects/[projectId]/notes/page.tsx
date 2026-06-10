@@ -21,17 +21,15 @@ export default function ProjectNotesPage() {
 
   const selected = useMemo(() => notes?.find((note) => note.id === selectedNote) ?? null, [notes, selectedNote]);
 
-  const createNote = useMutation(
-    async () => api.post(`/api/v1/notes/${projectId}`, { title, body }),
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries(['notes', projectId]);
-        setOpen(false);
-        setTitle('');
-        setBody('');
-      }
+  const createNote = useMutation({
+    mutationFn: async () => api.post(`/api/v1/notes/${projectId}`, { title, body }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['notes', projectId] });
+      setOpen(false);
+      setTitle('');
+      setBody('');
     }
-  );
+  });
 
   return (
     <div className="space-y-8">
@@ -131,7 +129,7 @@ export default function ProjectNotesPage() {
                 <button
                   type="button"
                   onClick={() => createNote.mutate()}
-                  disabled={createNote.isLoading}
+                  disabled={createNote.isPending}
                   className="inline-flex items-center gap-2 rounded-2xl bg-secondary px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#0047b2] disabled:cursor-not-allowed disabled:opacity-60"
                 >
                   Save note <ArrowRight size={16} />

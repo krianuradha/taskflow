@@ -5,7 +5,7 @@ import { useParams } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Plus, SquareRoundedCheck } from 'lucide-react';
+import { Plus, SquareCheck } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { useProject } from '@/hooks/useProject';
 import { useProjectTasks, useCreateTask } from '@/hooks/useTasks';
@@ -115,7 +115,7 @@ export default function ProjectTasksPage() {
                 <h2 className="mt-2 text-2xl font-semibold text-text-heading">Add a task to the board</h2>
               </div>
               <button onClick={() => setOpen(false)} className="rounded-full p-3 text-on-surface hover:bg-surface-container dark:hover:bg-[#152538]">
-                <SquareRoundedCheck size={20} />
+                <SquareCheck size={20} />
               </button>
             </div>
             <form className="space-y-5" onSubmit={handleSubmit(onSubmit)}>

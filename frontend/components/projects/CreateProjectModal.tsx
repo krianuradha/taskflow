@@ -14,7 +14,7 @@ interface CreateProjectModalProps {
 export default function CreateProjectModal({ open, onClose }: CreateProjectModalProps) {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
-  const { mutateAsync, isLoading } = useCreateProject();
+  const { mutateAsync, isPending } = useCreateProject();
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -60,10 +60,10 @@ export default function CreateProjectModal({ open, onClose }: CreateProjectModal
             </button>
             <button
               type="submit"
-              disabled={isLoading}
-              className={cn('rounded-2xl bg-secondary px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#0047b2]', isLoading && 'opacity-60')}
+              disabled={isPending}
+              className={cn('rounded-2xl bg-secondary px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#0047b2]', isPending && 'opacity-60')}
             >
-              {isLoading ? 'Creating…' : 'Create project'}
+              {isPending ? 'Creating…' : 'Create project'}
             </button>
           </div>
         </form>

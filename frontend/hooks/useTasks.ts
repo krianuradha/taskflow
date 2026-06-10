@@ -30,33 +30,29 @@ export function useTaskDetail(projectId: string, taskId: string) {
 
 export function useToggleSubtask(projectId: string, taskId: string) {
   const queryClient = useQueryClient();
-  return useMutation(
-    async (subtask: ISubtask) => {
+  return useMutation({
+    mutationFn: async (subtask: ISubtask) => {
       const response = await api.put<{ data: ISubtask }>(`/api/v1/tasks/${projectId}/st/${subtask.id}`, {
         completed: !subtask.completed
       });
       return response.data.data;
     },
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries(['task', projectId, taskId]);
-        queryClient.invalidateQueries(['tasks', projectId]);
-      }
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['task', projectId, taskId] });
+      queryClient.invalidateQueries({ queryKey: ['tasks', projectId] });
     }
-  );
+  });
 }
 
 export function useCreateTask(projectId: string) {
   const queryClient = useQueryClient();
-  return useMutation(
-    async (payload: { title: string; description: string; assigneeId: string; priority: string; dueDate: string; status: string }) => {
+  return useMutation({
+    mutationFn: async (payload: { title: string; description: string; assigneeId: string; priority: string; dueDate: string; status: string }) => {
       const response = await api.post<{ data: ITask }>(`/api/v1/tasks/${projectId}`, payload);
       return response.data.data;
     },
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries(['tasks', projectId]);
-      }
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['tasks', projectId] });
     }
-  );
+  });
 }

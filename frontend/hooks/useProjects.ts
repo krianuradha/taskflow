@@ -17,15 +17,13 @@ export function useProjects() {
 
 export function useCreateProject() {
   const queryClient = useQueryClient();
-  return useMutation(
-    async (payload: { name: string; description: string }) => {
+  return useMutation({
+    mutationFn: async (payload: { name: string; description: string }) => {
       const response = await api.post<{ data: IProject }>('/api/v1/projects/', payload);
       return response.data.data;
     },
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries(['projects']);
-      }
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['projects'] });
     }
-  );
+  });
 }

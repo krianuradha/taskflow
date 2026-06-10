@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import { CalendarDays, Clock, Papers, Tag, UploadCloud, MessageSquare, UserCheck, CheckCircle2 } from 'lucide-react';
+import { CalendarDays, Clock, Copy, Tag, UploadCloud, MessageSquare, UserCheck, CheckCircle2 } from 'lucide-react';
 import type { IAttachment, ISubtask, ITask } from '@/types';
 import { taskPriorityLabel, taskStatusLabel, formatDate, progressValue } from '@/lib/utils';
 import SubtaskItem from './SubtaskItem';
@@ -109,7 +109,7 @@ export default function TaskDetailView({ task, onToggleSubtask }: TaskDetailView
                 <span>Updated {formatDate(task.updatedAt)}</span>
               </div>
               <div className="flex items-center gap-3">
-                <Papers />
+                <Copy className="w-5 h-5" />
                 <span>Created {formatDate(task.createdAt)}</span>
               </div>
             </div>
