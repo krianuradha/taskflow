@@ -13,8 +13,7 @@
     "backend:dev": "cd backend && npm run dev",
     "backend:install": "cd backend && npm install",
     "frontend:dev": "cd frontend && npm run dev",
-    "frontend:install": "cd frontend && npm install",
-    "prepare": "husky"
+    "frontend:install": "cd frontend && npm install"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.8.1",
