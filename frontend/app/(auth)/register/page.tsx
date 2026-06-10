@@ -10,7 +10,8 @@ import { cn } from '@/lib/utils';
 
 const registerSchema = z
   .object({
-    name: z.string().min(2, 'Name is required'),
+    fullname: z.string().min(2, 'Full name is required'),
+    username: z.string().min(5, 'Username must be at least 5 characters').regex(/^[a-z0-9_]+$/, 'Username must be lowercase and contain no spaces'),
     email: z.string().email('Enter a valid email'),
     password: z.string().min(8, 'Password must be at least 8 characters'),
     confirmPassword: z.string().min(8, 'Confirm your password')
@@ -48,7 +49,8 @@ export default function RegisterPage() {
     setIsSubmitting(true);
     try {
       await api.post('/api/v1/auth/register', {
-        name: values.name,
+        fullname: values.fullname,
+        username: values.username,
         email: values.email,
         password: values.password
       });
@@ -70,12 +72,19 @@ export default function RegisterPage() {
           <p className="mt-2 text-sm text-on-surface-variant">Register and verify your email to manage projects with your team.</p>
         </div>
         <form className="space-y-5" onSubmit={handleSubmit(onSubmit)}>
-          <label className="block text-sm font-medium text-on-surface">Name</label>
+          <label className="block text-sm font-medium text-on-surface">Full Name</label>
           <input
-            className={cn('w-full rounded-xl border border-border-subtle bg-surface px-4 py-3 text-base text-on-surface transition-colors', errors.name && 'border-error')}
-            {...register('name')}
+            className={cn('w-full rounded-xl border border-border-subtle bg-surface px-4 py-3 text-base text-on-surface transition-colors', errors.fullname && 'border-error')}
+            {...register('fullname')}
           />
-          {errors.name && <p className="text-sm text-error">{errors.name.message}</p>}
+          {errors.fullname && <p className="text-sm text-error">{errors.fullname.message}</p>}
+
+          <label className="block text-sm font-medium text-on-surface">Username</label>
+          <input
+            className={cn('w-full rounded-xl border border-border-subtle bg-surface px-4 py-3 text-base text-on-surface transition-colors', errors.username && 'border-error')}
+            {...register('username')}
+          />
+          {errors.username && <p className="text-sm text-error">{errors.username.message}</p>}
 
           <label className="block text-sm font-medium text-on-surface">Email</label>
           <input
