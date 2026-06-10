@@ -53,7 +53,7 @@ export const sendVerificationEmail = async (user, verifyToken) => {
   })
 
   await transporter.sendMail({
-    from: `"Project Camp" <${process.env.SMTP_USER}>`,
+    from: `"Project Camp" <${process.env.SMTP_FROM || 'noreply@projectcamp.com'}>`,
     to: user.email,
     subject: 'Verify your Project Camp account',
     html: emailBody,
@@ -94,7 +94,7 @@ export const sendPasswordResetEmail = async (user, resetToken) => {
   })
 
   await transporter.sendMail({
-    from: `"Project Camp" <${process.env.SMTP_USER}>`,
+    from: `"Project Camp" <${process.env.SMTP_FROM || 'noreply@projectcamp.com'}>`,
     to: user.email,
     subject: 'Reset your Project Camp password',
     html: emailBody,
@@ -135,7 +135,7 @@ export const sendProjectInviteEmail = async (invitee, project, invitedBy) => {
   })
 
   await transporter.sendMail({
-    from: `"Project Camp" <${process.env.SMTP_USER}>`,
+    from: `"Project Camp" <${process.env.SMTP_FROM || 'noreply@projectcamp.com'}>`,
     to: invitee.email,
     subject: `You've been added to "${project.name}"`,
     html: emailBody,
