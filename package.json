@@ -1,35 +1,24 @@
 {
-  "name": "taskflow",
+  "name": "project-camp",
   "version": "1.0.0",
-  "description": "project management buddy",
+  "description": "Project Camp — monorepo root (tooling only)",
+  "private": true,
   "license": "ISC",
-  "author": "kumari anuradha",
   "type": "module",
-  "main": "index.js",
+  "workspaces": [
+    "frontend",
+    "backend"
+  ],
   "scripts": {
-    "dev": "nodemon src/server.js",
-    "start": "node src/server.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "client:install": "cd client && npm install",
-    "client:dev": "cd client && npm run dev",
-    "client:build": "cd client && npm run build"
+    "backend:dev": "cd backend && npm run dev",
+    "backend:install": "cd backend && npm install",
+    "frontend:dev": "cd frontend && npm run dev",
+    "frontend:install": "cd frontend && npm install",
+    "prepare": "husky"
   },
   "devDependencies": {
-    "@babel/parser": "^7.29.3",
-    "eslint": "^10.4.0",
-    "nodemon": "^3.1.14",
-    "prettier": "3.8.3"
-  },
-  "dependencies": {
-    "bcrypt": "^6.0.0",
-    "cookie-parser": "^1.4.7",
-    "cors": "^2.8.6",
-    "dotenv": "^17.4.2",
-    "express": "^5.2.1",
-    "express-validator": "^7.3.2",
-    "jsonwebtoken": "^9.0.3",
-    "mailgen": "^2.0.34",
-    "mongoose": "^9.5.0",
-    "nodemailer": "^8.0.6"
+    "@commitlint/cli": "^19.8.1",
+    "@commitlint/config-conventional": "^19.8.1",
+    "husky": "^9.1.7"
   }
 }
