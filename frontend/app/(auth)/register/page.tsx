@@ -13,7 +13,13 @@ const registerSchema = z
     fullname: z.string().min(2, 'Full name is required'),
     username: z.string().min(5, 'Username must be at least 5 characters').regex(/^[a-z0-9_]+$/, 'Username must be lowercase and contain no spaces'),
     email: z.string().email('Enter a valid email'),
-    password: z.string().min(8, 'Password must be at least 8 characters'),
+    password: z
+      .string()
+      .min(8, 'Password must be at least 8 characters')
+      .regex(/[a-z]/, 'Password must contain at least one lowercase letter')
+      .regex(/[A-Z]/, 'Password must contain at least one uppercase letter')
+      .regex(/[0-9]/, 'Password must contain at least one number')
+      .regex(/[^a-zA-Z0-9]/, 'Password must contain at least one symbol'),
     confirmPassword: z.string().min(8, 'Confirm your password')
   })
   .refine((data) => data.password === data.confirmPassword, {
@@ -34,6 +40,7 @@ export default function RegisterPage() {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   const {
     register,
@@ -47,6 +54,7 @@ export default function RegisterPage() {
 
   const onSubmit = async (values: RegisterValues) => {
     setIsSubmitting(true);
+    setErrorMsg(null);
     try {
       await api.post('/api/v1/auth/register', {
         fullname: values.fullname,
@@ -56,8 +64,15 @@ export default function RegisterPage() {
       });
       setSuccess(true);
       setTimeout(() => router.push('/login'), 2300);
-    } catch {
+    } catch (error: any) {
       setSuccess(false);
+      const errors = error.response?.data?.errors;
+      const message = error.response?.data?.message;
+      if (errors && errors.length > 0) {
+        setErrorMsg(errors.join(', '));
+      } else {
+        setErrorMsg(message || 'Registration failed. Please try again.');
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -112,6 +127,7 @@ export default function RegisterPage() {
           {errors.confirmPassword && <p className="text-sm text-error">{errors.confirmPassword.message}</p>}
 
           {success && <p className="rounded-2xl border border-secondary bg-secondary-container px-4 py-3 text-sm text-secondary">Check your email for verification details.</p>}
+          {errorMsg && <p className="rounded-2xl border border-error bg-error-container px-4 py-3 text-sm text-error">{errorMsg}</p>}
 
           <button
             type="submit"
