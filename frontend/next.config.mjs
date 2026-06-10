@@ -3,6 +3,12 @@ const nextConfig = {
   experimental: {
     externalDir: true,
   },
+  serverExternalPackages: [
+    'bcrypt',
+    'mongoose',
+    'express',
+    'uploadthing'
+  ],
   images: {
     remotePatterns: [
       {
