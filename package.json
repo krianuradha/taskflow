@@ -1,7 +1,7 @@
 {
-  "name": "project-camp",
+  "name": "taskflow",
   "version": "1.0.0",
-  "description": "Project Camp — monorepo root (tooling only)",
+  "description": "TaskFlow — monorepo root (tooling only)",
   "private": true,
   "license": "ISC",
   "type": "module",

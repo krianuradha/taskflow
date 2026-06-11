@@ -53,7 +53,7 @@ export default function LoginPage() {
       <div className="mx-auto max-w-md rounded-3xl bg-white px-8 py-10 shadow-soft transition-colors dark:bg-[#131b2e]">
         <div className="mb-8">
           <p className="text-sm uppercase tracking-[0.3em] text-secondary-container">Welcome back</p>
-          <h1 className="mt-3 text-3xl font-semibold text-text-heading">Sign in to Project Camp</h1>
+          <h1 className="mt-3 text-3xl font-semibold text-text-heading">Sign in to TaskFlow</h1>
           <p className="mt-2 text-sm text-on-surface-variant">Continue managing your projects, teams, and tasks.</p>
         </div>
         <form className="space-y-5" onSubmit={handleSubmit(onSubmit)}>
@@ -103,7 +103,7 @@ export default function LoginPage() {
         </form>
 
         <p className="mt-6 text-center text-sm text-on-surface-variant">
-          New to Project Camp?{' '}
+          New to TaskFlow?{' '}
           <a href="/register" className="font-semibold text-secondary hover:underline">
             Create account
           </a>

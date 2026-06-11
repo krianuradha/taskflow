@@ -34,7 +34,7 @@ export default function TopBar({ user }: TopBarProps) {
               <UserCircle2 size={18} />
             </div>
             <div className="hidden min-w-[10rem] flex-col sm:flex">
-              <span className="font-semibold text-text-heading">{user?.name ?? 'Project Camp'}</span>
+              <span className="font-semibold text-text-heading">{user?.name ?? 'TaskFlow'}</span>
               <span className="text-xs text-on-surface-variant">{user?.role ?? 'Member'}</span>
             </div>
           </div>

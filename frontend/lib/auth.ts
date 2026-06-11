@@ -1,7 +1,7 @@
 'use client';
 
-const ACCESS_TOKEN_KEY = 'projectcamp_access_token';
-const REFRESH_IN_PROGRESS_KEY = 'projectcamp_refresh_in_progress';
+const ACCESS_TOKEN_KEY = 'taskflow_access_token';
+const REFRESH_IN_PROGRESS_KEY = 'taskflow_refresh_in_progress';
 
 export function getAccessToken() {
   if (typeof window === 'undefined') return null;

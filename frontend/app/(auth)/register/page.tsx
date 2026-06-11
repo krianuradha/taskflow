@@ -83,7 +83,7 @@ export default function RegisterPage() {
       <div className="mx-auto max-w-lg rounded-3xl bg-white px-8 py-10 shadow-soft transition-colors dark:bg-[#131b2e]">
         <div className="mb-8">
           <p className="text-sm uppercase tracking-[0.3em] text-secondary-container">Create account</p>
-          <h1 className="mt-3 text-3xl font-semibold text-text-heading">Start your Project Camp trial</h1>
+          <h1 className="mt-3 text-3xl font-semibold text-text-heading">Start your TaskFlow trial</h1>
           <p className="mt-2 text-sm text-on-surface-variant">Register and verify your email to manage projects with your team.</p>
         </div>
         <form className="space-y-5" onSubmit={handleSubmit(onSubmit)}>

@@ -5,8 +5,8 @@ import { Providers } from '@/components/Providers'
 const metadataBaseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
 
 export const metadata: Metadata = {
-  title: 'Project Camp',
-  description: 'Project Camp is a production-ready project management workspace.',
+  title: 'TaskFlow',
+  description: 'TaskFlow is a production-ready project management workspace.',
   metadataBase: new URL(metadataBaseUrl),
 }
 

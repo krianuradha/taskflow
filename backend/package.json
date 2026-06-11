@@ -1,7 +1,7 @@
 {
-  "name": "project-camp-backend",
+  "name": "taskflow-backend",
   "version": "1.0.0",
-  "description": "Project Camp — Express backend",
+  "description": "TaskFlow — Express backend",
   "license": "ISC",
   "author": "kumari anuradha",
   "type": "module",

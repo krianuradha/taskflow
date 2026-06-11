@@ -22,12 +22,12 @@ if (process.env.NODE_ENV !== 'production') {
 
 // ── Verification Email ──────────────────────────────────────────────────────
 export const sendVerificationEmail = async (user, verifyToken) => {
-  const verifyUrl = `${process.env.FRONTEND_URL}/verify-email/${verifyToken}`
+  const verifyUrl = `${process.env.FRONTEND_URL || 'http://localhost:3000'}/verify-email/${verifyToken}`
 
   const emailBody = mailGenerator.generate({
     body: {
       name: user.fullname || user.username,
-      intro: 'Welcome to Project Camp! Please verify your email.',
+      intro: 'Welcome to TaskFlow! Please verify your email.',
       action: {
         instructions: 'Click the button below to verify your email address:',
         button: {
@@ -43,7 +43,7 @@ export const sendVerificationEmail = async (user, verifyToken) => {
   const emailText = mailGenerator.generatePlaintext({
     body: {
       name: user.fullname || user.username,
-      intro: 'Welcome to Project Camp! Please verify your email.',
+      intro: 'Welcome to TaskFlow! Please verify your email.',
       action: {
         instructions: 'Visit this link to verify your email:',
         button: { text: 'Verify Email', link: verifyUrl },
@@ -53,9 +53,9 @@ export const sendVerificationEmail = async (user, verifyToken) => {
   })
 
   await transporter.sendMail({
-    from: `"Project Camp" <${process.env.SMTP_FROM || 'noreply@projectcamp.com'}>`,
+    from: `"TaskFlow" <${process.env.SMTP_FROM || 'noreply@taskflow.com'}>`,
     to: user.email,
-    subject: 'Verify your Project Camp account',
+    subject: 'Verify your TaskFlow account',
     html: emailBody,
     text: emailText,
   })
@@ -63,12 +63,12 @@ export const sendVerificationEmail = async (user, verifyToken) => {
 
 // ── Password Reset Email ────────────────────────────────────────────────────
 export const sendPasswordResetEmail = async (user, resetToken) => {
-  const resetUrl = `${process.env.FRONTEND_URL}/reset-password/${resetToken}`
+  const resetUrl = `${process.env.FRONTEND_URL || 'http://localhost:3000'}/reset-password/${resetToken}`
 
   const emailBody = mailGenerator.generate({
     body: {
       name: user.fullname || user.username,
-      intro: 'You requested a password reset for your Project Camp account.',
+      intro: 'You requested a password reset for your TaskFlow account.',
       action: {
         instructions: 'Click the button below to reset your password. This link expires in 20 minutes.',
         button: {
@@ -84,7 +84,7 @@ export const sendPasswordResetEmail = async (user, resetToken) => {
   const emailText = mailGenerator.generatePlaintext({
     body: {
       name: user.fullname || user.username,
-      intro: 'You requested a password reset for your Project Camp account.',
+      intro: 'You requested a password reset for your TaskFlow account.',
       action: {
         instructions: 'Visit this link to reset your password. This link expires in 20 minutes:',
         button: { text: 'Reset Password', link: resetUrl },
@@ -94,9 +94,9 @@ export const sendPasswordResetEmail = async (user, resetToken) => {
   })
 
   await transporter.sendMail({
-    from: `"Project Camp" <${process.env.SMTP_FROM || 'noreply@projectcamp.com'}>`,
+    from: `"TaskFlow" <${process.env.SMTP_FROM || 'noreply@taskflow.com'}>`,
     to: user.email,
-    subject: 'Reset your Project Camp password',
+    subject: 'Reset your TaskFlow password',
     html: emailBody,
     text: emailText,
   })
@@ -104,12 +104,12 @@ export const sendPasswordResetEmail = async (user, resetToken) => {
 
 // ── Project Invite Email ────────────────────────────────────────────────────
 export const sendProjectInviteEmail = async (invitee, project, invitedBy) => {
-  const loginUrl = `${process.env.FRONTEND_URL}/login`
+  const loginUrl = `${process.env.FRONTEND_URL || 'http://localhost:3000'}/login`
 
   const emailBody = mailGenerator.generate({
     body: {
       name: invitee.fullname || invitee.username || invitee.email,
-      intro: `${invitedBy.fullname || invitedBy.username} has added you to the project "${project.name}" on Project Camp.`,
+      intro: `${invitedBy.fullname || invitedBy.username} has added you to the project "${project.name}" on TaskFlow.`,
       action: {
         instructions: 'Click below to view the project:',
         button: {
@@ -125,7 +125,7 @@ export const sendProjectInviteEmail = async (invitee, project, invitedBy) => {
   const emailText = mailGenerator.generatePlaintext({
     body: {
       name: invitee.fullname || invitee.username || invitee.email,
-      intro: `${invitedBy.fullname || invitedBy.username} has added you to the project "${project.name}" on Project Camp.`,
+      intro: `${invitedBy.fullname || invitedBy.username} has added you to the project "${project.name}" on TaskFlow.`,
       action: {
         instructions: 'Visit this link to view the project:',
         button: { text: 'Open Project', link: loginUrl },
@@ -135,7 +135,7 @@ export const sendProjectInviteEmail = async (invitee, project, invitedBy) => {
   })
 
   await transporter.sendMail({
-    from: `"Project Camp" <${process.env.SMTP_FROM || 'noreply@projectcamp.com'}>`,
+    from: `"TaskFlow" <${process.env.SMTP_FROM || 'noreply@taskflow.com'}>`,
     to: invitee.email,
     subject: `You've been added to "${project.name}"`,
     html: emailBody,

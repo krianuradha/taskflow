@@ -20,10 +20,10 @@ export default function Sidebar({ user, loading }: SidebarProps) {
     <aside className="fixed inset-y-0 left-0 z-20 hidden w-[280px] flex-col border-r border-border-subtle bg-white px-6 py-8 shadow-soft transition-colors dark:border-[#1e3a5f] dark:bg-[#0f2035] lg:flex">
       <div className="mb-8 flex items-center gap-3">
         <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-secondary text-white shadow-card">
-          <span className="text-lg font-semibold">PC</span>
+          <span className="text-lg font-semibold">TF</span>
         </div>
         <div>
-          <p className="text-sm font-semibold text-text-heading">Project Camp</p>
+          <p className="text-sm font-semibold text-text-heading">TaskFlow</p>
           <p className="text-xs text-on-surface-variant">Workspace dashboard</p>
         </div>
       </div>

@@ -52,7 +52,7 @@ app.use('/api/v1/healthcheck', (req, res) =>
 )
 
 // ── Root ─────────────────────────────────────────────────────────────────────
-app.get('/', (req, res) => res.json({ message: 'Project Camp API is running' }))
+app.get('/', (req, res) => res.json({ message: 'TaskFlow API is running' }))
 
 // ── Global Error Handler — MUST be last ─────────────────────────────────────
 app.use((err, req, res, next) => {

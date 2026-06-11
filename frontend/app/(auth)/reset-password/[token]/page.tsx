@@ -44,7 +44,7 @@ export default function ResetPasswordPage() {
     setIsSubmitting(true);
     try {
       await api.post(`/api/v1/auth/reset-password/${token}`, {
-        password: values.password
+        newPassword: values.password
       });
       setStatus('success');
       setTimeout(() => router.push('/login'), 2200);
