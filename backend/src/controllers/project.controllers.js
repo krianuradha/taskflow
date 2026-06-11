@@ -202,7 +202,8 @@ const addMemberToProject = asyncHandler(async (req, res) => {
   )
 
   // Fire-and-forget invite email
-  sendProjectInviteEmail(user, project, req.user).catch(console.error)
+  const baseUrl = process.env.FRONTEND_URL || `${req.protocol}://${req.get('host')}`
+  sendProjectInviteEmail(user, project, req.user, baseUrl).catch(console.error)
 
   return res.json({
     success: true,

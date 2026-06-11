@@ -49,7 +49,8 @@ const registerUser = asyncHandler(async (req, res) => {
   await newUser.save({ validateBeforeSave: false })
 
   // Fire-and-forget — do NOT await; never block the response on email
-  sendVerificationEmail(newUser, unHashedToken).catch(console.error)
+  const baseUrl = process.env.FRONTEND_URL || `${req.protocol}://${req.get('host')}`
+  sendVerificationEmail(newUser, unHashedToken, baseUrl).catch(console.error)
 
   const createdUser = await User.findById(newUser._id).select(
     '-password -refreshToken -emailVerificationToken -emailVerificationTokenExpiration'
@@ -162,7 +163,8 @@ const resendEmailVerification = asyncHandler(async (req, res) => {
   await user.save({ validateBeforeSave: false })
 
   // Fire-and-forget
-  sendVerificationEmail(user, unHashedToken).catch(console.error)
+  const baseUrl = process.env.FRONTEND_URL || `${req.protocol}://${req.get('host')}`
+  sendVerificationEmail(user, unHashedToken, baseUrl).catch(console.error)
 
   return res.status(200).json(new ApiResponse(200, null, 'Verification email sent successfully'))
 })
@@ -225,7 +227,8 @@ const forgotPassword = asyncHandler(async (req, res) => {
   await user.save({ validateBeforeSave: false })
 
   // Fire-and-forget
-  sendPasswordResetEmail(user, unHashedToken).catch(console.error)
+  const baseUrl = process.env.FRONTEND_URL || `${req.protocol}://${req.get('host')}`
+  sendPasswordResetEmail(user, unHashedToken, baseUrl).catch(console.error)
 
   return res.status(200).json(
     new ApiResponse(200, null, 'If that email exists, a reset link has been sent')

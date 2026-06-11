@@ -21,8 +21,8 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 // ── Verification Email ──────────────────────────────────────────────────────
-export const sendVerificationEmail = async (user, verifyToken) => {
-  const verifyUrl = `${process.env.FRONTEND_URL || 'http://localhost:3000'}/verify-email/${verifyToken}`
+export const sendVerificationEmail = async (user, verifyToken, baseUrl) => {
+  const verifyUrl = `${baseUrl || process.env.FRONTEND_URL || 'http://localhost:3000'}/verify-email/${verifyToken}`
 
   const emailBody = mailGenerator.generate({
     body: {
@@ -62,8 +62,8 @@ export const sendVerificationEmail = async (user, verifyToken) => {
 }
 
 // ── Password Reset Email ────────────────────────────────────────────────────
-export const sendPasswordResetEmail = async (user, resetToken) => {
-  const resetUrl = `${process.env.FRONTEND_URL || 'http://localhost:3000'}/reset-password/${resetToken}`
+export const sendPasswordResetEmail = async (user, resetToken, baseUrl) => {
+  const resetUrl = `${baseUrl || process.env.FRONTEND_URL || 'http://localhost:3000'}/reset-password/${resetToken}`
 
   const emailBody = mailGenerator.generate({
     body: {
@@ -103,8 +103,8 @@ export const sendPasswordResetEmail = async (user, resetToken) => {
 }
 
 // ── Project Invite Email ────────────────────────────────────────────────────
-export const sendProjectInviteEmail = async (invitee, project, invitedBy) => {
-  const loginUrl = `${process.env.FRONTEND_URL || 'http://localhost:3000'}/login`
+export const sendProjectInviteEmail = async (invitee, project, invitedBy, baseUrl) => {
+  const loginUrl = `${baseUrl || process.env.FRONTEND_URL || 'http://localhost:3000'}/login`
 
   const emailBody = mailGenerator.generate({
     body: {
