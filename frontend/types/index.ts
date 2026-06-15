@@ -9,13 +9,16 @@ export interface IUser {
   email: string;
   role: UserRole;
   avatarUrl?: string;
+  username?: string;
+  fullname?: string;
 }
 
 export interface IProject {
   id: string;
   name: string;
   description: string;
-  members: IUser[];
+  members?: IUser[];
+  memberCount?: number;
   taskCount: number;
   completedTasks: number;
 }

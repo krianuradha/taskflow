@@ -68,4 +68,49 @@ const createNote = asyncHandler(async (req, res) => {
   )
 })
 
-export { getNotes, createNote }
+const updateNote = asyncHandler(async (req, res) => {
+  const { projectId, noteId } = req.params
+  const { title, body } = req.body
+
+  const note = await ProjectNote.findOneAndUpdate(
+    { _id: noteId, project: projectId },
+    { title, content: body },
+    { new: true, runValidators: true }
+  ).populate('createdBy', 'fullname email')
+
+  if (!note) {
+    throw new ApiError(404, 'Note not found')
+  }
+
+  return res.json(
+    new ApiResponse(200, {
+      id: note._id.toString(),
+      title: note.title,
+      body: note.content,
+      author: {
+        id: note.createdBy._id.toString(),
+        name: note.createdBy.fullname || note.createdBy.email,
+        email: note.createdBy.email,
+        role: note.createdBy.role || 'member',
+      },
+      createdAt: note.createdAt.toISOString(),
+    }, 'Note updated successfully')
+  )
+})
+
+const deleteNote = asyncHandler(async (req, res) => {
+  const { projectId, noteId } = req.params
+
+  const note = await ProjectNote.findOneAndDelete({
+    _id: noteId,
+    project: projectId,
+  })
+
+  if (!note) {
+    throw new ApiError(404, 'Note not found')
+  }
+
+  return res.json(new ApiResponse(200, {}, 'Note deleted successfully'))
+})
+
+export { getNotes, createNote, updateNote, deleteNote }

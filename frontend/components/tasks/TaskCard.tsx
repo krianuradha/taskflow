@@ -26,7 +26,7 @@ export default function TaskCard({ projectId, task }: TaskCardProps) {
       <h3 className="mb-3 text-lg font-semibold text-text-heading">{task.title}</h3>
       <p className="text-sm leading-6 text-on-surface-variant">{task.description}</p>
       <div className="mt-5 flex items-center justify-between text-xs text-on-surface-variant">
-        <span className="flex items-center gap-1"><UserPlus size={14} /> {task.assignee.name}</span>
+        <span className="flex items-center gap-1"><UserPlus size={14} /> {task.assignee?.name || 'Unassigned'}</span>
         <span className="flex items-center gap-1"><Clock size={14} />{new Date(task.dueDate).toLocaleDateString()}</span>
       </div>
       <div className="mt-4 flex items-center gap-2 text-xs text-on-surface-variant">

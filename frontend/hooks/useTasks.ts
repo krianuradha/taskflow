@@ -47,7 +47,7 @@ export function useToggleSubtask(projectId: string, taskId: string) {
 export function useCreateTask(projectId: string) {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async (payload: { title: string; description: string; assigneeId: string; priority: string; dueDate: string; status: string }) => {
+    mutationFn: async (payload: { title: string; description: string; assignedTo?: string; priority: string; dueDate: string; status: string }) => {
       const response = await api.post<{ data: ITask }>(`/api/v1/tasks/${projectId}`, payload);
       return response.data.data;
     },

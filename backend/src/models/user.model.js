@@ -104,6 +104,11 @@ userSchema.methods.generateTemporaryToken = function () {
 // ── Strip sensitive fields from JSON responses ────────────────────────────────
 userSchema.methods.toJSON = function () {
   const obj = this.toObject()
+  obj.id = obj._id ? obj._id.toString() : obj.id
+  obj.name = obj.fullname || obj.username
+  if (obj.avatar) {
+    obj.avatarUrl = obj.avatar.url
+  }
   delete obj.password
   delete obj.refreshToken
   delete obj.emailVerificationToken

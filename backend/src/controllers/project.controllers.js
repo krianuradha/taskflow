@@ -246,11 +246,11 @@ const getProjectMembers = asyncHandler(async (req, res) => {
     {
       $project: {
         _id: 0,
-        project: 1,
-        user: 1,
+        id: { $toString: '$user._id' },
+        name: { $ifNull: ['$user.fullname', '$user.username'] },
+        email: '$user.email',
         role: 1,
-        createdAt: 1,
-        updatedAt: 1,
+        joinedAt: '$createdAt',
       },
     },
   ])

@@ -22,7 +22,8 @@ if (process.env.NODE_ENV !== 'production') {
 
 // ── Verification Email ──────────────────────────────────────────────────────
 export const sendVerificationEmail = async (user, verifyToken, baseUrl) => {
-  const verifyUrl = `${baseUrl || process.env.FRONTEND_URL || 'http://localhost:3000'}/verify-email/${verifyToken}`
+  const verifyUrl = `${baseUrl || process.env.FRONTEND_URL || 'http://localhost:3000'}/api/v1/auth/verify-email/${verifyToken}`
+  console.log('--- VERIFICATION LINK:', verifyUrl)
 
   const emailBody = mailGenerator.generate({
     body: {
@@ -64,6 +65,7 @@ export const sendVerificationEmail = async (user, verifyToken, baseUrl) => {
 // ── Password Reset Email ────────────────────────────────────────────────────
 export const sendPasswordResetEmail = async (user, resetToken, baseUrl) => {
   const resetUrl = `${baseUrl || process.env.FRONTEND_URL || 'http://localhost:3000'}/reset-password/${resetToken}`
+  console.log('--- RESET PASSWORD LINK:', resetUrl)
 
   const emailBody = mailGenerator.generate({
     body: {

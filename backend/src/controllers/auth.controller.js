@@ -140,7 +140,8 @@ const verifyEmail = asyncHandler(async (req, res) => {
   user.emailVerificationTokenExpiration = undefined
   await user.save()
 
-  return res.status(200).json(new ApiResponse(200, null, 'Email verified successfully'))
+  const frontendUrl = process.env.FRONTEND_URL || `${req.protocol}://${req.get('host')}`
+  return res.redirect(`${frontendUrl}/login?verified=true`)
 })
 
 // ── Resend Email Verification ─────────────────────────────────────────────────
@@ -279,6 +280,85 @@ const changePassword = asyncHandler(async (req, res) => {
   return res.status(200).json(new ApiResponse(200, null, 'Password changed successfully'))
 })
 
+// ── Update Profile ────────────────────────────────────────────────────────────
+const updateProfile = asyncHandler(async (req, res) => {
+  const { fullname, username, avatarUrl } = req.body
+  const userId = req.user._id
+
+  const user = await User.findById(userId)
+  if (!user) {
+    throw new ApiError(404, 'User not found')
+  }
+
+  if (username && username !== user.username) {
+    if (username.length < 5) {
+      throw new ApiError(400, 'Username must be at least 5 characters long')
+    }
+    if (username !== username.toLowerCase()) {
+      throw new ApiError(400, 'Username must be in lowercase')
+    }
+    const usernameExists = await User.findOne({ username })
+    if (usernameExists) {
+      throw new ApiError(409, 'Username is already taken')
+    }
+    user.username = username
+  }
+
+  if (fullname) {
+    if (fullname.trim().length < 2) {
+      throw new ApiError(400, 'Full name must be at least 2 characters long')
+    }
+    user.fullname = fullname
+  }
+
+  if (avatarUrl) {
+    user.avatar = {
+      url: avatarUrl,
+      localPath: ''
+    }
+  }
+
+  await user.save()
+
+  const updatedUser = await User.findById(userId).select(
+    '-password -refreshToken -emailVerificationToken -emailVerificationTokenExpiration'
+  )
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, updatedUser, 'Profile updated successfully'))
+})
+
+// ── Update Avatar ─────────────────────────────────────────────────────────────
+const updateAvatar = asyncHandler(async (req, res) => {
+  if (!req.file) {
+    throw new ApiError(400, 'No file uploaded')
+  }
+
+  const userId = req.user._id
+  const user = await User.findById(userId)
+  if (!user) {
+    throw new ApiError(404, 'User not found')
+  }
+
+  // Convert buffer to base64 Data URL for easy storage
+  const base64Image = req.file.buffer.toString('base64')
+  const avatarUrl = `data:${req.file.mimetype};base64,${base64Image}`
+
+  user.avatar = {
+    url: avatarUrl,
+    localPath: ''
+  }
+  
+  await user.save()
+
+  const updatedUser = await User.findById(userId).select(
+    '-password -refreshToken -emailVerificationToken -emailVerificationTokenExpiration'
+  )
+
+  return res.status(200).json(new ApiResponse(200, updatedUser, 'Avatar updated successfully'))
+})
+
 export {
   registerUser,
   loginUser,
@@ -290,4 +370,6 @@ export {
   forgotPassword,
   resetForgotPassword,
   changePassword,
+  updateProfile,
+  updateAvatar,
 }

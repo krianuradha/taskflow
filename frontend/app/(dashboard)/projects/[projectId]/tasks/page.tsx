@@ -8,7 +8,9 @@ import { z } from 'zod';
 import { Plus, SquareCheck } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { useProject } from '@/hooks/useProject';
+import { useMembers } from '@/hooks/useMembers';
 import { useProjectTasks, useCreateTask } from '@/hooks/useTasks';
+import { useProjectRole } from '@/hooks/useProjectRole';
 import TaskCard from '@/components/tasks/TaskCard';
 import { cn } from '@/lib/utils';
 
@@ -16,7 +18,8 @@ const taskSchema = z.object({
   title: z.string().min(3, 'Title is required'),
   description: z.string().min(8, 'Description is required'),
   priority: z.enum(['low', 'medium', 'high']),
-  dueDate: z.string().min(1, 'Due date is required')
+  dueDate: z.string().min(1, 'Due date is required'),
+  assignedTo: z.string().optional(),
 });
 
 type TaskFormValues = z.infer<typeof taskSchema>;
@@ -25,26 +28,29 @@ export default function ProjectTasksPage() {
   const params = useParams();
   const projectId = params?.projectId as string;
   const { user, hasPermission } = useAuth();
+  const projectRole = useProjectRole(projectId);
   const { data: project } = useProject(projectId);
   const { data: tasks, isLoading } = useProjectTasks(projectId);
   const [open, setOpen] = useState(false);
+  const { data: members } = useMembers(projectId);
   const createTask = useCreateTask(projectId);
 
   const {
     register,
     handleSubmit,
     reset,
-    formState: { errors, isSubmitting }
+    formState: { errors, isSubmitting },
   } = useForm<TaskFormValues>({
     resolver: zodResolver(taskSchema),
-    defaultValues: { priority: 'medium' }
+    defaultValues: { priority: 'medium' },
   });
 
-  const columns = useMemo(
+  // Ensure columns update when tasks change
+const columns = useMemo(
     () => ({
       todo: tasks?.filter((task) => task.status === 'todo') ?? [],
       'in-progress': tasks?.filter((task) => task.status === 'in-progress') ?? [],
-      done: tasks?.filter((task) => task.status === 'done') ?? []
+      done: tasks?.filter((task) => task.status === 'done') ?? [],
     }),
     [tasks]
   );
@@ -55,8 +61,8 @@ export default function ProjectTasksPage() {
       description: values.description,
       priority: values.priority,
       dueDate: values.dueDate,
-      assigneeId: user?.id ?? '',
-      status: 'todo'
+      assignedTo: values.assignedTo || '',
+      status: 'todo',
     });
     reset();
     setOpen(false);
@@ -70,7 +76,7 @@ export default function ProjectTasksPage() {
           <h1 className="mt-2 text-3xl font-semibold text-text-heading">Project tasks</h1>
           <p className="mt-3 text-sm text-on-surface-variant">Organize work by status and assign items to the team.</p>
         </div>
-        {hasPermission('manageTasks') && (
+        {hasPermission('manageTasks', projectRole) && (
           <button onClick={() => setOpen(true)} className="inline-flex items-center gap-2 rounded-2xl bg-secondary px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#0047b2]">
             <Plus size={18} /> New Task
           </button>
@@ -89,7 +95,9 @@ export default function ProjectTasksPage() {
             <section key={status} className="rounded-[1.75rem] bg-white p-6 shadow-soft dark:bg-[#131b2e]">
               <div className="mb-6 flex items-center justify-between gap-3">
                 <div>
-                  <p className="text-sm uppercase tracking-[0.3em] text-secondary-container">{status === 'todo' ? 'To do' : status === 'in-progress' ? 'In progress' : 'Done'}</p>
+                  <p className="text-sm uppercase tracking-[0.3em] text-secondary-container">
+                    {status === 'todo' ? 'To do' : status === 'in-progress' ? 'In progress' : 'Done'}
+                  </p>
                   <p className="text-2xl font-semibold text-text-heading">{columns[status].length}</p>
                 </div>
                 <span className="rounded-full bg-surface-container px-3 py-2 text-xs font-semibold text-on-surface">
@@ -120,17 +128,37 @@ export default function ProjectTasksPage() {
             </div>
             <form className="space-y-5" onSubmit={handleSubmit(onSubmit)}>
               <label className="block text-sm font-medium text-on-surface">Task name</label>
-              <input className="w-full rounded-2xl border border-border-subtle bg-surface px-4 py-3 text-base text-on-surface transition focus:border-secondary focus:ring-2 focus:ring-secondary/10 dark:bg-[#152538]" {...register('title')} />
+              <input
+                className="w-full rounded-2xl border border-border-subtle bg-surface px-4 py-3 text-base text-on-surface transition focus:border-secondary focus:ring-2 focus:ring-secondary/10 dark:bg-[#152538]"
+                {...register('title')}
+              />
+              {/* Assigned To */}
+              <select
+                className="mt-2 w-full rounded-2xl border border-border-subtle bg-surface px-4 py-3 text-base text-on-surface transition focus:border-secondary focus:ring-2 focus:ring-secondary/10 dark:bg-[#152538]"
+                {...register('assignedTo')}
+              >
+                <option value="">Unassigned</option>
+                {members?.map((m) => (
+                  <option key={m.id} value={m.id}>{m.name ?? m.email}</option>
+                ))}
+              </select>
               {errors.title && <p className="text-sm text-error">{errors.title.message}</p>}
 
               <label className="block text-sm font-medium text-on-surface">Description</label>
-              <textarea className="w-full rounded-2xl border border-border-subtle bg-surface px-4 py-3 text-base text-on-surface transition focus:border-secondary focus:ring-2 focus:ring-secondary/10 dark:bg-[#152538]" rows={4} {...register('description')} />
+              <textarea
+                className="w-full rounded-2xl border border-border-subtle bg-surface px-4 py-3 text-base text-on-surface transition focus:border-secondary focus:ring-2 focus:ring-secondary/10 dark:bg-[#152538]"
+                rows={4}
+                {...register('description')}
+              />
               {errors.description && <p className="text-sm text-error">{errors.description.message}</p>}
 
               <div className="grid gap-5 sm:grid-cols-2">
                 <div>
                   <label className="block text-sm font-medium text-on-surface">Priority</label>
-                  <select className="mt-2 w-full rounded-2xl border border-border-subtle bg-surface px-4 py-3 text-base text-on-surface transition focus:border-secondary focus:ring-2 focus:ring-secondary/10 dark:bg-[#152538]" {...register('priority')}>
+                  <select
+                    className="mt-2 w-full rounded-2xl border border-border-subtle bg-surface px-4 py-3 text-base text-on-surface transition focus:border-secondary focus:ring-2 focus:ring-secondary/10 dark:bg-[#152538]"
+                    {...register('priority')}
+                  >
                     <option value="low">Low</option>
                     <option value="medium">Medium</option>
                     <option value="high">High</option>
@@ -138,7 +166,11 @@ export default function ProjectTasksPage() {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-on-surface">Due date</label>
-                  <input className="mt-2 w-full rounded-2xl border border-border-subtle bg-surface px-4 py-3 text-base text-on-surface transition focus:border-secondary focus:ring-2 focus:ring-secondary/10 dark:bg-[#152538]" type="date" {...register('dueDate')} />
+                  <input
+                    className="mt-2 w-full rounded-2xl border border-border-subtle bg-surface px-4 py-3 text-base text-on-surface transition focus:border-secondary focus:ring-2 focus:ring-secondary/10 dark:bg-[#152538]"
+                    type="date"
+                    {...register('dueDate')}
+                  />
                   {errors.dueDate && <p className="text-sm text-error">{errors.dueDate.message}</p>}
                 </div>
               </div>

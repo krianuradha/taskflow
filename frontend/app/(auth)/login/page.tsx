@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, useEffect } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -19,8 +19,17 @@ type LoginValues = z.infer<typeof loginSchema>;
 
 export default function LoginPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
+  const [isSuccess, setIsSuccess] = useState(false);
+
+  useEffect(() => {
+    if (searchParams?.get('verified') === 'true') {
+      setIsSuccess(true);
+      setMessage('Email verified successfully! You can now sign in.');
+    }
+  }, [searchParams]);
 
   const {
     register,
@@ -42,6 +51,7 @@ export default function LoginPage() {
       }
       router.push('/projects');
     } catch (error) {
+      setIsSuccess(false);
       setMessage('Invalid credentials or account locked.');
     } finally {
       setIsSubmitting(false);
@@ -91,7 +101,16 @@ export default function LoginPage() {
             </a>
           </div>
 
-          {message && <p className="rounded-2xl border border-error bg-error-container px-4 py-3 text-sm text-error">{message}</p>}
+          {message && (
+            <p className={cn(
+              "rounded-2xl border px-4 py-3 text-sm",
+              isSuccess
+                ? "border-secondary bg-secondary-container text-secondary"
+                : "border-error bg-error-container text-error"
+            )}>
+              {message}
+            </p>
+          )}
 
           <button
             type="submit"

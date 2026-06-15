@@ -45,6 +45,12 @@ const taskSchema = new mongoose.Schema(
         size: Number,
       },
     ],
+    subtasks: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Subtask',
+      },
+    ],
   },
   {
     timestamps: true,

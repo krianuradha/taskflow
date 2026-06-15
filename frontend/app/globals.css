@@ -10,12 +10,16 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  --color-text-heading: #0F172A;
+  --color-text-body: #334155;
 }
 
 .dark {
   color-scheme: dark;
   background-color: #0b1c30;
   color: #dce9ff;
+  --color-text-heading: #f8f9ff;
+  --color-text-body: #dce9ff;
 }
 
 html {

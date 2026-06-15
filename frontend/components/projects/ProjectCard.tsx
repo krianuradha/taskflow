@@ -18,7 +18,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
           <p className="text-sm uppercase tracking-[0.24em] text-secondary-container">Project</p>
           <h2 className="mt-3 text-xl font-semibold text-text-heading">{project.name}</h2>
         </div>
-        <div className="rounded-2xl bg-secondary px-3 py-2 text-sm font-semibold text-white">{project.members.length} members</div>
+        <div className="rounded-2xl bg-secondary px-3 py-2 text-sm font-semibold text-white">{(project.members?.length ?? project.memberCount ?? 0)} members</div>
       </div>
       <p className="mt-4 text-sm leading-6 text-on-surface-variant">{project.description}</p>
       <div className="mt-6 space-y-3">
